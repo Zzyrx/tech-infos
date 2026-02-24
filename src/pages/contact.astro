@@ -1,0 +1,83 @@
+---
+// src/pages/contact.astro
+import SEOHead from '../components/SEOHead.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <SEOHead
+    title="Contact"
+    description="Contactez l'equipe tech-infos pour toute question, suggestion ou demande de partenariat."
+  />
+</head>
+<body class="min-h-screen bg-white">
+  <header class="border-b border-gray-200">
+    <div class="max-w-3xl mx-auto px-4 py-3">
+      <a href="/" class="font-serif text-xl font-bold text-gray-900 no-underline">tech-infos</a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-8">
+    <h1>Nous contacter</h1>
+
+    <p class="text-lg text-gray-600 mb-8">
+      Vous avez une question, une suggestion ou une demande de partenariat ?
+      N'hesitez pas a nous ecrire.
+    </p>
+
+    <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 mb-10">
+      <h2 class="mt-0">Par email</h2>
+      <p>
+        Ecrivez-nous a :
+        <a href="mailto:contact@tech-infos.fr" class="font-semibold">
+          contact@tech-infos.fr
+        </a>
+      </p>
+      <p class="text-sm text-gray-500 mb-0">
+        Nous nous efforcons de repondre dans un delai de 48 heures ouvrables.
+      </p>
+    </div>
+
+    <section class="mb-10">
+      <h2>Sujets frequents</h2>
+      <div class="space-y-4">
+        <div class="border border-gray-200 rounded-lg p-4">
+          <h3 class="text-base font-semibold mt-0 mb-2">Correction d'un article</h3>
+          <p class="text-sm text-gray-600 mb-0">
+            Vous avez repere une erreur dans l'un de nos articles ? Merci de nous la
+            signaler en indiquant l'URL de la page et la correction suggeree.
+          </p>
+        </div>
+        <div class="border border-gray-200 rounded-lg p-4">
+          <h3 class="text-base font-semibold mt-0 mb-2">Partenariat / Affiliation</h3>
+          <p class="text-sm text-gray-600 mb-0">
+            Vous souhaitez proposer un partenariat ou un programme d'affiliation ?
+            Contactez-nous avec les details de votre proposition.
+          </p>
+        </div>
+        <div class="border border-gray-200 rounded-lg p-4">
+          <h3 class="text-base font-semibold mt-0 mb-2">Droit a l'effacement (RGPD)</h3>
+          <p class="text-sm text-gray-600 mb-0">
+            Pour exercer vos droits relatifs a la protection des donnees personnelles,
+            consultez nos <a href="/mentions-legales">mentions legales</a> ou ecrivez-nous.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-gray-200 mt-16 py-8">
+    <div class="max-w-3xl mx-auto px-4 text-center text-sm text-gray-500">
+      <p>&copy; {new Date().getFullYear()} tech-infos. Tous droits reserves.</p>
+      <div class="flex justify-center gap-4 mt-2">
+        <a href="/" class="hover:text-gray-700 no-underline">Accueil</a>
+        <a href="/mentions-legales" class="hover:text-gray-700 no-underline">Mentions legales</a>
+      </div>
+    </div>
+  </footer>
+  <CookieConsent />
+</body>
+</html>

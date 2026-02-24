@@ -1,0 +1,163 @@
+---
+// src/pages/mentions-legales.astro
+import SEOHead from '../components/SEOHead.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <SEOHead
+    title="Mentions legales"
+    description="Mentions legales du site tech-infos : editeur, hebergement, politique de confidentialite, cookies et liens affilies."
+  />
+</head>
+<body class="min-h-screen bg-white">
+  <header class="border-b border-gray-200">
+    <div class="max-w-3xl mx-auto px-4 py-3">
+      <a href="/" class="font-serif text-xl font-bold text-gray-900 no-underline">tech-infos</a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-8">
+    <h1>Mentions legales</h1>
+
+    <section class="mb-10">
+      <h2>Editeur du site</h2>
+      <p>
+        Le site <strong>tech-infos</strong> est edite par :<br />
+        <!-- A remplir avec les informations reelles -->
+        [Nom / Raison sociale]<br />
+        [Adresse]<br />
+        [Email de contact] : <a href="mailto:contact@tech-infos.fr">contact@tech-infos.fr</a><br />
+        [Numero SIRET si applicable]
+      </p>
+      <p>Directeur de la publication : [Nom du directeur de publication]</p>
+    </section>
+
+    <section class="mb-10">
+      <h2>Hebergement</h2>
+      <p>
+        Ce site est heberge par :<br />
+        <strong>Vercel Inc.</strong><br />
+        440 N Barranca Ave #4133, Covina, CA 91723, USA<br />
+        Site web : <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">vercel.com</a>
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2>Propriete intellectuelle</h2>
+      <p>
+        L'ensemble des contenus (textes, images, graphismes, logo, icones) presentes sur le site
+        tech-infos sont proteges par les lois francaises et internationales relatives a la
+        propriete intellectuelle.
+      </p>
+      <p>
+        Toute reproduction, representation, modification, publication ou adaptation de tout ou
+        partie des elements du site, quel que soit le moyen ou le procede utilise, est interdite
+        sans autorisation ecrite prealable.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2>Liens affilies et monetisation</h2>
+      <p>
+        Certains liens presentes sur ce site sont des <strong>liens affilies</strong>. Cela
+        signifie que si vous cliquez sur ces liens et effectuez un achat, nous pouvons percevoir
+        une commission, sans aucun cout supplementaire pour vous.
+      </p>
+      <p>
+        Ces liens sont clairement identifies par la mention "Liens affilies" sur chaque page
+        concernee. Notre objectif est de recommander des produits et services que nous estimons
+        utiles et de qualite.
+      </p>
+      <p>
+        Ce site affiche egalement des publicites fournies par <strong>Google AdSense</strong>.
+        Ces publicites sont gerees par Google et peuvent utiliser des cookies pour afficher des
+        annonces personnalisees.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2>Politique de confidentialite (RGPD)</h2>
+
+      <h3>Donnees collectees</h3>
+      <p>
+        Ce site ne collecte aucune donnee personnelle directement. Cependant, des services tiers
+        utilises sur ce site peuvent collecter des donnees :
+      </p>
+      <ul>
+        <li><strong>Google Analytics</strong> : donnees de navigation anonymisees (pages visitees, duree, appareil)</li>
+        <li><strong>Google AdSense</strong> : cookies publicitaires pour la personnalisation des annonces</li>
+      </ul>
+
+      <h3>Cookies</h3>
+      <p>
+        Ce site utilise des cookies a des fins de mesure d'audience et de publicite. Vous pouvez
+        configurer votre navigateur pour refuser les cookies ou etre averti lorsqu'un cookie est
+        depose.
+      </p>
+      <p>Types de cookies utilises :</p>
+      <ul>
+        <li><strong>Cookies techniques</strong> : necessaires au fonctionnement du site</li>
+        <li><strong>Cookies analytiques</strong> : Google Analytics (mesure d'audience)</li>
+        <li><strong>Cookies publicitaires</strong> : Google AdSense (annonces personnalisees)</li>
+      </ul>
+
+      <h3>Vos droits</h3>
+      <p>
+        Conformement au Reglement General sur la Protection des Donnees (RGPD), vous disposez des
+        droits suivants :
+      </p>
+      <ul>
+        <li>Droit d'acces a vos donnees personnelles</li>
+        <li>Droit de rectification</li>
+        <li>Droit a l'effacement ("droit a l'oubli")</li>
+        <li>Droit a la limitation du traitement</li>
+        <li>Droit a la portabilite des donnees</li>
+        <li>Droit d'opposition</li>
+      </ul>
+      <p>
+        Pour exercer ces droits, contactez-nous a :
+        <a href="mailto:contact@tech-infos.fr">contact@tech-infos.fr</a>
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2>Limitation de responsabilite</h2>
+      <p>
+        Les informations presentees sur ce site sont fournies a titre informatif et ne constituent
+        en aucun cas un conseil professionnel. Nous nous efforcons de fournir des informations
+        exactes et a jour, mais nous ne garantissons pas l'exactitude, l'exhaustivite ou la
+        pertinence des contenus.
+      </p>
+      <p>
+        L'utilisation des informations presentees sur ce site se fait sous votre entiere
+        responsabilite. Consultez un professionnel qualifie avant toute prise de decision
+        importante.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2>Droit applicable</h2>
+      <p>
+        Les presentes mentions legales sont soumises au droit francais. En cas de litige, les
+        tribunaux francais seront seuls competents.
+      </p>
+      <p><em>Derniere mise a jour : fevrier 2026</em></p>
+    </section>
+  </main>
+
+  <footer class="border-t border-gray-200 mt-16 py-8">
+    <div class="max-w-3xl mx-auto px-4 text-center text-sm text-gray-500">
+      <p>&copy; {new Date().getFullYear()} tech-infos. Tous droits reserves.</p>
+      <div class="flex justify-center gap-4 mt-2">
+        <a href="/" class="hover:text-gray-700 no-underline">Accueil</a>
+        <a href="/contact" class="hover:text-gray-700 no-underline">Contact</a>
+      </div>
+    </div>
+  </footer>
+  <CookieConsent />
+</body>
+</html>

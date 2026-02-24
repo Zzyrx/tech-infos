@@ -1,0 +1,144 @@
+---
+// src/components/NewsletterSignup.astro
+// Formulaire d'inscription newsletter avec stockage localStorage
+
+interface Props {
+  variant?: 'article' | 'homepage';
+}
+
+const { variant = 'article' } = Astro.props;
+
+// Classes conditionnelles selon la variante
+const containerClass = variant === 'homepage' ? 'max-w-4xl mx-auto' : 'w-full';
+---
+
+<div class={`newsletter-signup rounded-2xl p-6 md:p-8 mt-8 ${containerClass}`} style="background-color: #1c1917;">
+  <div id="newsletter-form-container">
+    <h3 class="font-display text-xl md:text-2xl font-bold text-white mt-0 mb-2">
+      Restez informe(e)
+    </h3>
+    <p class="text-warm-400 text-sm mb-5">
+      Recevez nos meilleurs articles et analyses directement dans votre boite mail.
+    </p>
+
+    <form id="newsletter-form" class="space-y-4" novalidate>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input
+          type="email"
+          id="newsletter-email"
+          name="email"
+          placeholder="Votre adresse email"
+          required
+          autocomplete="email"
+          class="flex-1 px-4 py-3 rounded-lg bg-warm-800 text-white placeholder-warm-500 border border-warm-700 focus:border-warm-400 focus:outline-none focus:ring-1 focus:ring-warm-400 text-sm font-body"
+        />
+        <button
+          type="submit"
+          class="px-6 py-3 rounded-lg bg-white text-warm-900 font-semibold text-sm hover:bg-warm-100 transition-colors cursor-pointer border-0 whitespace-nowrap"
+        >
+          S'inscrire
+        </button>
+      </div>
+
+      <label class="flex items-start gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          id="newsletter-consent"
+          name="consent"
+          required
+          class="mt-1 rounded border-warm-600 text-white focus:ring-warm-400"
+        />
+        <span class="text-xs text-warm-400 leading-relaxed">
+          J'accepte de recevoir la newsletter et la
+          <a href="/mentions-legales" class="text-warm-300 hover:text-white underline">politique de confidentialite</a>.
+        </span>
+      </label>
+
+      <!-- Message d'erreur -->
+      <p id="newsletter-error" class="text-red-400 text-xs mt-1 mb-0 hidden"></p>
+    </form>
+  </div>
+
+  <!-- Message de confirmation (cache par defaut) -->
+  <div id="newsletter-success" class="hidden text-center py-4">
+    <p class="text-white font-semibold text-lg mb-1" id="newsletter-success-text"></p>
+  </div>
+</div>
+
+<script>
+  // Gestion du formulaire newsletter avec localStorage
+  (function () {
+    const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+    const emailInput = document.getElementById('newsletter-email') as HTMLInputElement | null;
+    const consentInput = document.getElementById('newsletter-consent') as HTMLInputElement | null;
+    const errorEl = document.getElementById('newsletter-error');
+    const formContainer = document.getElementById('newsletter-form-container');
+    const successEl = document.getElementById('newsletter-success');
+    const successText = document.getElementById('newsletter-success-text');
+
+    if (!form || !emailInput || !consentInput || !errorEl || !formContainer || !successEl || !successText) return;
+
+    function showError(message: string) {
+      errorEl!.textContent = message;
+      errorEl!.classList.remove('hidden');
+    }
+
+    function hideError() {
+      errorEl!.classList.add('hidden');
+    }
+
+    function getSubscribers(): string[] {
+      try {
+        const data = localStorage.getItem('newsletter-subscribers');
+        return data ? JSON.parse(data) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function addSubscriber(email: string) {
+      const subscribers = getSubscribers();
+      subscribers.push(email);
+      localStorage.setItem('newsletter-subscribers', JSON.stringify(subscribers));
+    }
+
+    // Validation simple d'email
+    function isValidEmail(email: string): boolean {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      hideError();
+
+      const email = emailInput!.value.trim();
+
+      // Validation email
+      if (!email || !isValidEmail(email)) {
+        showError('Veuillez saisir une adresse email valide.');
+        return;
+      }
+
+      // Validation consentement
+      if (!consentInput!.checked) {
+        showError('Veuillez accepter les conditions pour vous inscrire.');
+        return;
+      }
+
+      // Verifier si deja inscrit
+      const subscribers = getSubscribers();
+      if (subscribers.includes(email)) {
+        formContainer!.classList.add('hidden');
+        successEl!.classList.remove('hidden');
+        successText!.textContent = 'Vous etes deja inscrit(e).';
+        return;
+      }
+
+      // Enregistrer l'inscription
+      addSubscriber(email);
+      formContainer!.classList.add('hidden');
+      successEl!.classList.remove('hidden');
+      successText!.textContent = 'Merci ! Vous etes inscrit(e).';
+    });
+  })();
+</script>

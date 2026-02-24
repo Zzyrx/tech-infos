@@ -1,0 +1,79 @@
+---
+// src/components/CookieConsent.astro
+// Bandeau de consentement cookies RGPD
+// Conditionne le chargement du script AdSense
+---
+
+<div
+  id="cookie-banner"
+  class="fixed bottom-0 left-0 right-0 z-50 hidden"
+  role="dialog"
+  aria-label="Consentement cookies"
+>
+  <div class="max-w-2xl mx-auto px-4 py-4">
+    <div class="bg-warm-900 text-warm-300 rounded-xl shadow-2xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <p class="text-sm font-body mb-0">
+        Ce site utilise des cookies pour la publicite et les statistiques.
+        <a href="/mentions-legales" class="underline text-warm-400 hover:text-white">En savoir plus</a>
+      </p>
+      <div class="flex gap-3 flex-shrink-0">
+        <button
+          id="cookie-refuse"
+          class="px-4 py-2 text-sm font-body border border-warm-700 rounded-lg hover:bg-warm-800 text-warm-300 transition-colors"
+        >
+          Refuser
+        </button>
+        <button
+          id="cookie-accept"
+          class="px-4 py-2 text-sm font-body bg-white text-warm-900 font-semibold rounded-lg hover:bg-warm-100 transition-colors"
+        >
+          Accepter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Cle de stockage du consentement
+  const CONSENT_KEY = 'cookie-consent';
+  const banner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('cookie-accept');
+  const refuseBtn = document.getElementById('cookie-refuse');
+
+  // Charger le script AdSense si le consentement est donne
+  function loadAdSense() {
+    const adClientMeta = document.querySelector('meta[name="adsense-id"]');
+    const adClient = adClientMeta?.getAttribute('content');
+    if (!adClient) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    script.dataset.adClient = adClient;
+    document.head.appendChild(script);
+  }
+
+  // Enregistrer le choix de l'utilisateur
+  function setConsent(value: string) {
+    localStorage.setItem(CONSENT_KEY, value);
+    banner?.classList.add('hidden');
+    if (value === 'accepted') {
+      loadAdSense();
+    }
+  }
+
+  // Verifier le consentement existant
+  const consent = localStorage.getItem(CONSENT_KEY);
+  if (!consent) {
+    // Pas de choix : afficher le bandeau
+    banner?.classList.remove('hidden');
+  } else if (consent === 'accepted') {
+    // Deja accepte : charger AdSense
+    loadAdSense();
+  }
+
+  acceptBtn?.addEventListener('click', () => setConsent('accepted'));
+  refuseBtn?.addEventListener('click', () => setConsent('refused'));
+</script>

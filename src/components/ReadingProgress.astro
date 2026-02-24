@@ -1,0 +1,52 @@
+---
+// src/components/ReadingProgress.astro
+// Barre de progression de lecture (couleur depuis siteConfig)
+import { siteConfig } from '../data/site-config';
+
+const barColor = siteConfig.color.hex;
+---
+
+<div
+  id="reading-progress"
+  style={`position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: ${barColor}; z-index: 100; transition: width 0.1s linear;`}
+  aria-hidden="true"
+></div>
+
+<script>
+  (function () {
+    const bar = document.getElementById('reading-progress');
+    if (!bar) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      bar.style.transition = 'none';
+    }
+
+    let ticking = false;
+
+    function updateProgress() {
+      const scrollY = window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const maxScroll = documentHeight - viewportHeight;
+
+      if (maxScroll <= 0) {
+        bar.style.width = '100%';
+        return;
+      }
+
+      const progress = Math.min((scrollY / maxScroll) * 100, 100);
+      bar.style.width = progress + '%';
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    updateProgress();
+  })();
+</script>

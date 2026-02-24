@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Bouclier cyber violet -->
+  <path d="M16 2L4 7v8c0 7.5 5.1 14.5 12 16 6.9-1.5 12-8.5 12-16V7L16 2z" fill="#a855f7"/>
+  <path d="M16 4L6 8.3v6.7c0 6.5 4.4 12.5 10 13.8V4z" fill="#9333ea"/>
+  <!-- Lettre T -->
+  <text x="9" y="23" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="white">T</text>
+</svg>

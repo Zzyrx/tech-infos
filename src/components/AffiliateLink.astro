@@ -1,0 +1,41 @@
+---
+// src/components/AffiliateLink.astro
+// Encart affiliation — bordure coloree niche
+interface Props {
+  products: { name: string; link: string; description: string }[];
+}
+
+const { products } = Astro.props;
+---
+
+{products && products.length > 0 && (
+  <div
+    class="bg-white rounded-xl p-6 my-10 border-l-[3px] border-l-niche-500"
+    style="border: 1px solid rgba(0,0,0,0.06); border-left-width: 3px;"
+  >
+    <h3 class="font-display text-xl font-bold text-warm-900 mb-5 mt-0">
+      Notre selection
+    </h3>
+    <div class="space-y-4">
+      {products.map(product => (
+        <div class="bg-warm-50 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <span class="font-body font-semibold text-warm-900">{product.name}</span>
+            <p class="text-sm text-warm-500 mb-0 font-body">{product.description}</p>
+          </div>
+          <a
+            href={product.link}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            class="inline-flex items-center px-5 py-2.5 bg-warm-900 text-white rounded-lg text-sm font-semibold font-body hover:bg-warm-800 no-underline whitespace-nowrap transition-colors"
+          >
+            Decouvrir
+          </a>
+        </div>
+      ))}
+    </div>
+    <p class="text-xs text-warm-400 mt-4 mb-0 font-body">
+      * Liens affilies. Nous pouvons percevoir une commission sans cout supplementaire pour vous.
+    </p>
+  </div>
+)}

@@ -1,0 +1,35 @@
+---
+// src/pages/[slug].astro
+// Page article — routing direct a la racine (mono-niche)
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import { calculateReadingTime } from '../utils/readingTime';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map(article => {
+    // id format: "mon-article.md" ou "mon-article" (sans sous-dossier niche)
+    const slug = article.id.replace(/\.md$/, '');
+    return { params: { slug }, props: { article } };
+  });
+}
+
+const { article } = Astro.props;
+const { Content, headings } = await render(article);
+const readingTime = calculateReadingTime(article.body || '');
+---
+
+<ArticleLayout
+  title={article.data.title}
+  description={article.data.description}
+  publishDate={article.data.publishDate}
+  updatedDate={article.data.updatedDate}
+  faq={article.data.faq}
+  affiliateProducts={article.data.affiliateProducts}
+  relatedSlugs={article.data.relatedSlugs}
+  headings={headings}
+  currentSlug={article.id}
+  readingTime={readingTime}
+>
+  <Content />
+</ArticleLayout>

@@ -1,0 +1,123 @@
+---
+// src/components/Navigation.astro
+// Navigation editoriale mono-niche avec menu mobile et recherche
+
+import SearchDialog from './SearchDialog.astro';
+import { siteConfig } from '../data/site-config';
+import { comparateurs } from '../data/comparateurs';
+
+// Liens de navigation simplifies
+const navLinks = [
+  { label: 'Accueil', href: '/' },
+  // Ajouter les comparateurs disponibles
+  ...comparateurs.map(c => ({
+    label: c.title.split(':')[0].trim(),
+    href: `/comparateur/${c.slug}`,
+  })),
+];
+---
+
+<header class="site-header">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="site-logo">
+      <span class="site-logo-text">{siteConfig.name}<span class="site-logo-dot"></span></span>
+    </a>
+
+    <!-- Navigation desktop -->
+    <nav class="hidden md:flex items-center gap-1" aria-label="Navigation principale">
+      {navLinks.map(link => (
+        <a href={link.href} class="nav-link">
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Bouton recherche + hamburger mobile -->
+    <div class="flex items-center gap-1">
+      <button
+        id="search-toggle"
+        class="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-warm-100 transition-colors"
+        aria-label="Rechercher (Ctrl+K)"
+        title="Rechercher (Ctrl+K)"
+      >
+        <svg class="w-4 h-4 text-warm-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+
+      <!-- Bouton hamburger mobile -->
+      <button
+        id="menu-toggle"
+        class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-warm-100 transition-colors"
+        aria-label="Ouvrir le menu"
+        aria-expanded="false"
+      >
+        <svg
+          id="icon-open"
+          class="w-5 h-5 text-warm-700"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          viewBox="0 0 24 24"
+        >
+          <path d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg
+          id="icon-close"
+          class="w-5 h-5 text-warm-700 hidden"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          viewBox="0 0 24 24"
+        >
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menu mobile -->
+  <nav id="mobile-menu" class="mobile-menu" aria-label="Navigation mobile" aria-hidden="true">
+    <div class="max-w-6xl mx-auto px-4 pb-4 flex flex-col gap-1">
+      {navLinks.map(link => (
+        <a href={link.href} class="mobile-nav-link">
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+</header>
+
+<SearchDialog />
+
+<script>
+  // Toggle du menu hamburger mobile
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  if (toggle && menu && iconOpen && iconClose) {
+    toggle.addEventListener('click', () => {
+      const isOpen = menu.classList.contains('mobile-menu--open');
+      menu.classList.toggle('mobile-menu--open');
+      menu.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      toggle.setAttribute('aria-label', isOpen ? 'Ouvrir le menu' : 'Fermer le menu');
+      iconOpen.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
+    });
+  }
+
+  // Bouton recherche
+  const searchToggle = document.getElementById('search-toggle');
+  if (searchToggle) {
+    searchToggle.addEventListener('click', () => {
+      if ((window as any).__openSearch) (window as any).__openSearch();
+    });
+  }
+</script>

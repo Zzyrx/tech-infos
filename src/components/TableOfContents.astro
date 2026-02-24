@@ -1,0 +1,43 @@
+---
+// src/components/TableOfContents.astro
+// Sommaire editorial avec bordure coloree niche
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+// Ne garder que h2 et h3
+const toc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{toc.length > 0 && (
+  <nav
+    class="bg-white rounded-xl p-6 mb-8 border-l-[3px] border-l-niche-500"
+    style="border: 1px solid rgba(0,0,0,0.06); border-left-width: 3px;"
+    aria-label="Sommaire"
+  >
+    <h2 class="text-xs font-bold uppercase tracking-widest text-warm-400 mb-4 mt-0 font-body flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+        <line x1="8" y1="6" x2="21" y2="6"/>
+        <line x1="8" y1="12" x2="21" y2="12"/>
+        <line x1="8" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="3.01" y2="6"/>
+        <line x1="3" y1="12" x2="3.01" y2="12"/>
+        <line x1="3" y1="18" x2="3.01" y2="18"/>
+      </svg>
+      Sommaire
+    </h2>
+    <ol class="space-y-1 list-none pl-0 mb-0">
+      {toc.map(heading => (
+        <li>
+          <a
+            href={`#${heading.slug}`}
+            class={`toc-link ${heading.depth === 3 ? 'toc-link--sub' : ''}`}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

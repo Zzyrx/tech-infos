@@ -1,0 +1,91 @@
+---
+// src/pages/a-propos.astro
+// Page "A propos" - presentation editoriale de tech-infos
+
+import SEOHead from '../components/SEOHead.astro';
+import Navigation from '../components/Navigation.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <SEOHead
+    title="A propos - tech-infos"
+    description="Decouvrez tech-infos : guides pratiques en cybersecurite, VPN, protection des donnees et outils numeriques."
+  />
+</head>
+<body class="min-h-screen">
+  <Navigation />
+
+  <!-- Header -->
+  <section class="max-w-6xl mx-auto px-4 pt-12 pb-8">
+    <h1 class="font-display text-4xl font-bold text-warm-900 mb-3">A propos de tech-infos</h1>
+    <p class="text-lg text-warm-500 max-w-2xl">
+      Des guides clairs et des comparatifs fiables pour proteger votre vie numerique.
+    </p>
+  </section>
+
+  <!-- Contenu principal -->
+  <main class="max-w-3xl mx-auto px-4 pb-16">
+    <div class="bg-white rounded-2xl p-8 md:p-12 shadow-sm">
+
+      <!-- Notre mission -->
+      <section class="mb-10">
+        <h2 class="font-display text-2xl font-bold text-warm-900 mb-4">Notre mission</h2>
+        <p class="text-warm-600 leading-relaxed mb-4">
+          tech-infos est un site specialise en <strong>cybersecurite</strong>,
+          <strong>VPN</strong>, <strong>protection des donnees</strong> et
+          <strong>outils numeriques</strong>.
+        </p>
+        <p class="text-warm-600 leading-relaxed">
+          Notre objectif : vous fournir des informations fiables et accessibles pour
+          faire les bons choix technologiques, securiser vos donnees et naviguer
+          sereinement sur Internet.
+        </p>
+      </section>
+
+      <!-- Notre methodologie -->
+      <section class="mb-10">
+        <h2 class="font-display text-2xl font-bold text-warm-900 mb-4">Notre methodologie</h2>
+        <p class="text-warm-600 leading-relaxed mb-4">
+          Nos articles sont rediges a l'aide de modeles d'intelligence artificielle
+          (LLMs) qui nous permettent d'effectuer des recherches approfondies et de
+          synthetiser des informations provenant de multiples sources.
+        </p>
+        <p class="text-warm-600 leading-relaxed">
+          Chaque contenu fait l'objet d'une relecture humaine afin de garantir
+          la pertinence, la clarte et l'exactitude des informations publiees.
+        </p>
+      </section>
+
+      <!-- Engagement qualite -->
+      <section class="mb-10">
+        <h2 class="font-display text-2xl font-bold text-warm-900 mb-4">Engagement qualite</h2>
+        <p class="text-warm-600 leading-relaxed mb-4">
+          Nous mettons a jour regulierement nos articles pour refleter les evolutions
+          en matiere de cybersecurite, les nouvelles menaces et les dernieres
+          offres du marche.
+        </p>
+        <p class="text-warm-600 leading-relaxed">
+          Si vous constatez une erreur ou souhaitez suggerer une amelioration,
+          n'hesitez pas a nous <a href="/contact" class="text-warm-900 font-semibold underline hover:text-warm-700 transition-colors">contacter</a>.
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer simplifie -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="site-footer-bottom">
+        <p>&copy; {new Date().getFullYear()} tech-infos. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <CookieConsent />
+</body>
+</html>

@@ -1,0 +1,40 @@
+---
+// src/components/Breadcrumbs.astro
+interface BreadcrumbItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": items.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.label,
+    "item": new URL(item.href, Astro.site).href,
+  })),
+};
+---
+
+<nav aria-label="Fil d'Ariane" class="text-sm text-gray-500 mb-6">
+  <ol class="flex flex-wrap items-center gap-1">
+    {items.map((item, index) => (
+      <li class="flex items-center">
+        {index > 0 && <span class="mx-2">/</span>}
+        {index === items.length - 1 ? (
+          <span class="text-gray-700 font-medium">{item.label}</span>
+        ) : (
+          <a href={item.href} class="hover:text-gray-700 no-underline">{item.label}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />

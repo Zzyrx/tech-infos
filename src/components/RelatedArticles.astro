@@ -1,0 +1,64 @@
+---
+// src/components/RelatedArticles.astro
+// Articles lies — mono-niche, plus de filtre par niche
+import { getCollection } from 'astro:content';
+import { siteConfig } from '../data/site-config';
+
+interface Props {
+  currentSlug: string;
+  relatedSlugs?: string[];
+}
+
+const { currentSlug, relatedSlugs = [] } = Astro.props;
+
+const allArticles = await getCollection('articles');
+
+// Trouver les articles lies par slug
+let related = allArticles.filter(a =>
+  relatedSlugs.includes(a.id.replace(/\.md$/, ''))
+);
+
+// Completer avec d'autres articles si pas assez
+if (related.length < 3) {
+  const others = allArticles.filter(a =>
+    a.id !== currentSlug &&
+    !related.some(r => r.id === a.id)
+  );
+  related = [...related, ...others].slice(0, 3);
+}
+---
+
+{related.length > 0 && (
+  <section class="mt-12 pt-10" style="border-top: 2px solid #1a1a1a;">
+    <h2 class="font-display text-xl font-bold text-warm-900 mb-6 mt-0 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-warm-400">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      A lire aussi
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {related.map(article => {
+        const slug = article.id.replace(/\.md$/, '');
+        return (
+          <a
+            href={`/${slug}`}
+            class="related-card group"
+          >
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-niche-500">
+                <Fragment set:html={siteConfig.nicheIcon} />
+              </span>
+              <span class="text-xs uppercase tracking-wider text-warm-400 font-semibold font-body">
+                {siteConfig.nicheLabel}
+              </span>
+            </div>
+            <h3 class="text-sm font-semibold text-warm-900 mt-0 mb-0 font-display group-hover:text-warm-600 transition-colors">
+              {article.data.title}
+            </h3>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+)}

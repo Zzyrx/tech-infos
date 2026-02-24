@@ -1,0 +1,146 @@
+---
+// src/components/SearchDialog.astro
+// Modale de recherche client-side avec Fuse.js
+---
+
+<div id="search-dialog" class="hidden fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div id="search-overlay" class="absolute inset-0 bg-black/50"></div>
+  <div class="relative max-w-xl mx-auto mt-20 bg-white rounded-2xl shadow-2xl overflow-hidden" style="border: 1px solid rgba(0,0,0,0.1);">
+    <div class="flex items-center gap-3 p-4 border-b" style="border-color: rgba(0,0,0,0.06);">
+      <svg class="w-5 h-5 text-warm-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="search-input" type="search" placeholder="Rechercher un article..." class="flex-1 text-warm-900 placeholder-warm-400 outline-none bg-transparent font-body" />
+      <button id="search-close" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-warm-100 text-warm-400" aria-label="Fermer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="search-results" class="max-h-96 overflow-y-auto p-2">
+      <p id="search-empty" class="text-center text-warm-400 py-8 text-sm">Tapez pour rechercher...</p>
+    </div>
+    <div class="px-4 py-2 bg-warm-50 text-xs text-warm-400 flex items-center gap-2 border-t" style="border-color: rgba(0,0,0,0.06);">
+      <kbd class="px-1.5 py-0.5 bg-white rounded border text-warm-500" style="border-color: rgba(0,0,0,0.1);">Esc</kbd>
+      <span>pour fermer</span>
+      <span class="mx-1">&middot;</span>
+      <kbd class="px-1.5 py-0.5 bg-white rounded border text-warm-500" style="border-color: rgba(0,0,0,0.1);">Ctrl+K</kbd>
+      <span>pour ouvrir</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Map des couleurs pour les badges niche
+  const nicheColors: Record<string, { bg: string; text: string }> = {
+    finance: { bg: 'bg-finance-100', text: 'text-finance-700' },
+    assurance: { bg: 'bg-assurance-100', text: 'text-assurance-700' },
+    tech: { bg: 'bg-tech-100', text: 'text-tech-700' },
+    juridique: { bg: 'bg-juridique-100', text: 'text-juridique-700' },
+    immobilier: { bg: 'bg-immobilier-100', text: 'text-immobilier-700' },
+  };
+
+  const nicheLabels: Record<string, string> = {
+    finance: 'Finance',
+    assurance: 'Assurance',
+    tech: 'Tech & Cyber',
+    juridique: 'Juridique',
+    immobilier: 'Immobilier',
+  };
+
+  let searchIndex: any[] = [];
+  let fuse: any = null;
+
+  const dialog = document.getElementById('search-dialog')!;
+  const overlay = document.getElementById('search-overlay')!;
+  const input = document.getElementById('search-input') as HTMLInputElement;
+  const results = document.getElementById('search-results')!;
+  const empty = document.getElementById('search-empty')!;
+  const closeBtn = document.getElementById('search-close')!;
+
+  // Charger Fuse.js et l'index a la premiere ouverture
+  async function initSearch() {
+    if (fuse) return;
+
+    const [fuseModule, indexResponse] = await Promise.all([
+      import('https://esm.sh/fuse.js@7.0.0'),
+      fetch('/search-index.json'),
+    ]);
+
+    searchIndex = await indexResponse.json();
+    const Fuse = fuseModule.default;
+    fuse = new Fuse(searchIndex, {
+      threshold: 0.3,
+      keys: ['title', 'description'],
+    });
+  }
+
+  function openSearch() {
+    dialog.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    input.value = '';
+    results.innerHTML = '';
+    empty.style.display = 'block';
+    results.appendChild(empty);
+    input.focus();
+    initSearch();
+  }
+
+  function closeSearch() {
+    dialog.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function renderResults(query: string) {
+    if (!fuse || !query.trim()) {
+      results.innerHTML = '';
+      empty.textContent = 'Tapez pour rechercher...';
+      empty.style.display = 'block';
+      results.appendChild(empty);
+      return;
+    }
+
+    const hits = fuse.search(query).slice(0, 8);
+
+    if (hits.length === 0) {
+      results.innerHTML = '';
+      empty.textContent = 'Aucun resultat pour "' + query + '"';
+      empty.style.display = 'block';
+      results.appendChild(empty);
+      return;
+    }
+
+    results.innerHTML = hits.map((hit: any) => {
+      const item = hit.item;
+      const colors = nicheColors[item.niche] || { bg: 'bg-warm-100', text: 'text-warm-700' };
+      const label = nicheLabels[item.niche] || item.niche;
+      return `
+        <a href="${item.slug}" class="block px-3 py-3 rounded-xl hover:bg-warm-50 no-underline transition-colors">
+          <div class="flex items-start gap-3">
+            <div class="flex-1 min-w-0">
+              <p class="font-display font-semibold text-warm-900 text-sm mb-1 truncate">${item.title}</p>
+              <p class="text-xs text-warm-500 line-clamp-1 font-body">${item.description}</p>
+            </div>
+            <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${colors.bg} ${colors.text} flex-shrink-0 font-body">
+              ${label}
+            </span>
+          </div>
+        </a>
+      `;
+    }).join('');
+  }
+
+  // Evenements
+  input.addEventListener('input', () => renderResults(input.value));
+  closeBtn.addEventListener('click', closeSearch);
+  overlay.addEventListener('click', closeSearch);
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape' && !dialog.classList.contains('hidden')) {
+      closeSearch();
+    }
+  });
+
+  // Expose pour le bouton de la navigation
+  (window as any).__openSearch = openSearch;
+</script>
